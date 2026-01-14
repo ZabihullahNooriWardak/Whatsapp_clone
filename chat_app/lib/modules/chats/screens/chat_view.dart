@@ -11,6 +11,8 @@ class ChatView extends StatefulWidget {
 class _ChatViewState extends State<ChatView> {
   @override
   Widget build(BuildContext context) {
-    return ConversationTile();
+    return ListView(
+      children: [ConversationTile(), ConversationTile(), ConversationTile()],
+    );
   }
 }
