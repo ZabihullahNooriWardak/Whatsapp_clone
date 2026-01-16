@@ -34,7 +34,7 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                     widget.chatModel.name,
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
-                  Text('12:00 AM', style: TextStyle(fontSize: 12)),
+                  Text('last seen today at 12:00 AM', style: TextStyle(fontSize: 10)),
                 ],
               ),
             ],
