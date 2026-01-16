@@ -1,10 +1,10 @@
-class ConversationTileModel {
+class ChatModel {
   String name;
   String? icon;
   bool isGroup;
   String time;
   String currentMessage;
-  ConversationTileModel({
+  ChatModel({
     required this.name,
     required this.isGroup,
     required this.time,

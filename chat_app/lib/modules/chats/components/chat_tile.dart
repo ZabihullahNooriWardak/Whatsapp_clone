@@ -1,9 +1,9 @@
 import 'package:chat_app/modules/chats/models/chat_model.dart';
 import 'package:flutter/material.dart';
 
-class ConversationTile extends StatelessWidget {
-  const ConversationTile({super.key, required this.conversationTile});
-  final ConversationTileModel conversationTile;
+class ChatTile extends StatelessWidget {
+  const ChatTile({super.key, required this.conversationTile});
+  final ChatModel conversationTile;
   @override
   Widget build(BuildContext context) {
     return InkWell(
