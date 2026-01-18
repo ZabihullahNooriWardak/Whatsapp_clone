@@ -1,5 +1,7 @@
 import 'package:chat_app/modules/chats/models/chat_model.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 
 class ChatDetailsView extends StatefulWidget {
   const ChatDetailsView({super.key, required this.chatModel});
@@ -10,6 +12,9 @@ class ChatDetailsView extends StatefulWidget {
 }
 
 class _ChatDetailsViewState extends State<ChatDetailsView> {
+  final _controller = TextEditingController();
+  final _scrollController = ScrollController();
+  bool _emojiShowing = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,46 +70,85 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-                child: Row(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 4,
+                ),
+                child: Column(
                   children: [
-                    // Input field
-                    Expanded(
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        margin: EdgeInsets.zero,
-                        child: TextFormField(
-                          textAlignVertical: TextAlignVertical.center,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Type a message',
-                            contentPadding: EdgeInsets.symmetric(vertical: 5),
-                            prefixIcon: Icon(Icons.emoji_emotions),
-                        
-                            suffixIcon: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.attach_file),
-                                ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.camera_alt),
-                                ),
-                              ],
+                    Row(
+                      children: [
+                        // Input field
+                        Expanded(
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
                             ),
-                      
+                            margin: EdgeInsets.zero,
+                            child: TextFormField(
+                              scrollController: _scrollController,
+                              controller: _controller,
+                              textAlignVertical: TextAlignVertical.center,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Type a message',
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: 5,
+                                ),
+                                prefixIcon: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _emojiShowing = !_emojiShowing;
+                                    });
+                                  },
+                                  child: Icon(Icons.emoji_emotions),
+                                ),
+
+                                suffixIcon: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(Icons.attach_file),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(Icons.camera_alt),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        SizedBox(width: 8),
+                        CircleAvatar(radius: 25, child: Icon(Icons.mic)),
+                      ],
                     ),
-                    SizedBox(width: 8),
-                    CircleAvatar(
-                      radius: 25,
-                      child: Icon(Icons.mic),
+                    Offstage(
+                      offstage: !_emojiShowing,
+                      child: EmojiPicker(
+                        textEditingController: _controller,
+                        scrollController: _scrollController,
+                        config: Config(
+                          height: 256,
+                          checkPlatformCompatibility: true,
+                          viewOrderConfig: const ViewOrderConfig(),
+                          emojiViewConfig: EmojiViewConfig(
+                            // Issue: https://github.com/flutter/flutter/issues/28894
+                            emojiSizeMax:
+                                28 *
+                                (foundation.defaultTargetPlatform ==
+                                        TargetPlatform.iOS
+                                    ? 1.2
+                                    : 1.0),
+                          ),
+                          skinToneConfig: const SkinToneConfig(),
+                          categoryViewConfig: const CategoryViewConfig(),
+                          bottomActionBarConfig: const BottomActionBarConfig(),
+                          searchViewConfig: const SearchViewConfig(),
+                        ),
+                      ),
                     ),
                   ],
                 ),
