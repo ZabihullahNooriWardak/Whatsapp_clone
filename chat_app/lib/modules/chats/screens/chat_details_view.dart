@@ -1,7 +1,7 @@
 import 'package:chat_app/modules/chats/models/chat_model.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 
 class ChatDetailsView extends StatefulWidget {
   const ChatDetailsView({super.key, required this.chatModel});
@@ -12,11 +12,11 @@ class ChatDetailsView extends StatefulWidget {
 }
 
 class _ChatDetailsViewState extends State<ChatDetailsView> {
-  final _controller = TextEditingController();
-  final _scrollController = ScrollController();
-  bool _emojiShowing = false;
   @override
   Widget build(BuildContext context) {
+    final _controller = TextEditingController();
+    final _scrollController = ScrollController();
+    bool _emojiShowing = false;
     return Scaffold(
       backgroundColor: Colors.blueGrey,
       appBar: AppBar(
@@ -75,6 +75,7 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                   vertical: 4,
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Row(
                       children: [
@@ -86,8 +87,8 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                             ),
                             margin: EdgeInsets.zero,
                             child: TextFormField(
-                              scrollController: _scrollController,
                               controller: _controller,
+                              scrollController: _scrollController,
                               textAlignVertical: TextAlignVertical.center,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
