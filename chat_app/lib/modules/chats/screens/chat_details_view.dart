@@ -1,6 +1,4 @@
 import 'package:chat_app/modules/chats/models/chat_model.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 
 class ChatDetailsView extends StatefulWidget {
@@ -14,9 +12,6 @@ class ChatDetailsView extends StatefulWidget {
 class _ChatDetailsViewState extends State<ChatDetailsView> {
   @override
   Widget build(BuildContext context) {
-    final _controller = TextEditingController();
-    final _scrollController = ScrollController();
-    bool _emojiShowing = false;
     return Scaffold(
       backgroundColor: Colors.blueGrey,
       appBar: AppBar(
@@ -65,7 +60,7 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
       ),
       body: Stack(
         children: [
-          ListView(), // Your chat messages
+          ListView(),
           SafeArea(
             child: Align(
               alignment: Alignment.bottomCenter,
@@ -79,7 +74,6 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                   children: [
                     Row(
                       children: [
-                        // Input field
                         Expanded(
                           child: Card(
                             shape: RoundedRectangleBorder(
@@ -87,8 +81,6 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                             ),
                             margin: EdgeInsets.zero,
                             child: TextFormField(
-                              controller: _controller,
-                              scrollController: _scrollController,
                               textAlignVertical: TextAlignVertical.center,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
@@ -97,11 +89,7 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                                   vertical: 5,
                                 ),
                                 prefixIcon: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      _emojiShowing = !_emojiShowing;
-                                    });
-                                  },
+                                  onTap: () {},
                                   child: Icon(Icons.emoji_emotions),
                                 ),
 
@@ -109,7 +97,9 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        _showBottomSheet();
+                                      },
                                       icon: Icon(Icons.attach_file),
                                     ),
                                     IconButton(
@@ -126,31 +116,6 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                         CircleAvatar(radius: 25, child: Icon(Icons.mic)),
                       ],
                     ),
-                    Offstage(
-                      offstage: !_emojiShowing,
-                      child: EmojiPicker(
-                        textEditingController: _controller,
-                        scrollController: _scrollController,
-                        config: Config(
-                          height: 256,
-                          checkPlatformCompatibility: true,
-                          viewOrderConfig: const ViewOrderConfig(),
-                          emojiViewConfig: EmojiViewConfig(
-                            // Issue: https://github.com/flutter/flutter/issues/28894
-                            emojiSizeMax:
-                                28 *
-                                (foundation.defaultTargetPlatform ==
-                                        TargetPlatform.iOS
-                                    ? 1.2
-                                    : 1.0),
-                          ),
-                          skinToneConfig: const SkinToneConfig(),
-                          categoryViewConfig: const CategoryViewConfig(),
-                          bottomActionBarConfig: const BottomActionBarConfig(),
-                          searchViewConfig: const SearchViewConfig(),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -158,6 +123,82 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
           ),
         ],
       ),
+    );
+  }
+
+  _showBottomSheet() {
+    return showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (context) {
+        return SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height / 2.5,
+          child: Card(
+            margin: EdgeInsets.all(18),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildBottomSheetIcon(
+                      Icons.insert_drive_file,
+                      Colors.blueGrey,
+                      'Documents',
+                    ),
+                            _buildBottomSheetIcon(
+                      Icons.camera_alt,
+                      const Color.fromARGB(255, 161, 10, 83),
+                      'Camera',
+                    ),
+                            _buildBottomSheetIcon(
+                      Icons.image,
+                      Colors.deepPurple,
+                      'Gallery',
+                    ),
+                  ],
+                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildBottomSheetIcon(
+                      Icons.headphones,
+                      Colors.orange,
+                      'Audio',
+                    ),
+                            _buildBottomSheetIcon(
+                      Icons.location_on_rounded,
+                      Colors.purpleAccent,
+                      'Location',
+                    ),
+                            _buildBottomSheetIcon(
+                      Icons.person,
+                      Colors.blue,
+                      'Contact',
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildBottomSheetIcon(IconData icon, Color color, String title) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 30,
+          backgroundColor: color,
+          child: Icon(icon),
+          foregroundColor: Colors.white,
+        ),
+        SizedBox(height: 10),
+        Text(title),
+      ],
     );
   }
 }
