@@ -1,6 +1,6 @@
 import 'package:chat_app/modules/chats/models/chat_model.dart';
 import 'package:chat_app/modules/create_conversation/components/contact_card.dart';
-import 'package:chat_app/modules/create_conversation/components/header_tile.dart';
+import 'package:chat_app/modules/create_conversation/new_group/components/selected_avatar.dart';
 import 'package:flutter/material.dart';
 
 class CreateGroupView extends StatefulWidget {
@@ -32,26 +32,56 @@ class _CreateGroupViewState extends State<CreateGroupView> {
         ),
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
       ),
-      body: ListView.builder(
-        itemCount: contacts.length,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              if (contacts[index].selected) {
-                setState(() {
-                  contacts[index].selected = false;
-                  selectedContacts.remove(contacts[index]);
-                });
-              } else {
-                setState(() {
-                  contacts[index].selected = true;
-                  selectedContacts.add(contacts[index]);
-                });
+      body: Stack(
+        children: [
+          ListView.builder(
+            itemCount: contacts.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Container(height: selectedContacts.isNotEmpty ? 90 : 10);
               }
+              return InkWell(
+                onTap: () {
+                  if (contacts[index - 1].selected) {
+                    setState(() {
+                      contacts[index - 1].selected = false;
+                      selectedContacts.remove(contacts[index - 1]);
+                    });
+                  } else {
+                    setState(() {
+                      contacts[index - 1].selected = true;
+                      selectedContacts.add(contacts[index - 1]);
+                    });
+                  }
+                },
+                child: ContactCard(contact: contacts[index - 1]),
+              );
             },
-            child: ContactCard(contact: contacts[index]),
-          );
-        },
+          ),
+          if (selectedContacts.isNotEmpty)
+            Column(
+              children: [
+                SizedBox(
+                  height: 90,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: selectedContacts.length,
+                    itemBuilder: (context, index) {
+                      return SelectedContactAvatar(
+                        contact: selectedContacts[index],
+                        onRemovedClick: () {
+                          setState(() {
+                            selectedContacts[index].selected = false;
+                            selectedContacts.remove(selectedContacts[index]);
+                          });
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+        ],
       ),
     );
   }
