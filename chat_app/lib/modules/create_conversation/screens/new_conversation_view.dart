@@ -12,10 +12,10 @@ class NewConversationView extends StatefulWidget {
 
 class _NewConversationViewState extends State<NewConversationView> {
   List<ChatModel> contacts = [
-    ChatModel(name: 'Ali', status: 'Full stack developer'),
-    ChatModel(name: 'Kalid', status: 'Life is nice'),
-    ChatModel(name: 'Wali', status: 'Stay strong baby'),
-    ChatModel(name: 'Ahmad', status: 'Mindset is everything'),
+    ChatModel(name: 'Ali', about: 'Full stack developer'),
+    ChatModel(name: 'Kalid', about: 'Life is nice'),
+    ChatModel(name: 'Wali', about: 'Stay strong baby'),
+    ChatModel(name: 'Ahmad', about: 'Mindset is everything'),
   ];
   @override
   Widget build(BuildContext context) {

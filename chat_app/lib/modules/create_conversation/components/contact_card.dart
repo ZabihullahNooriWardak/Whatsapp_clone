@@ -7,14 +7,33 @@ class ContactCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        radius: 25,
-        child: Icon(Icons.person),
-        backgroundColor: Colors.grey,
-        foregroundColor: Colors.white,
+      leading: SizedBox(
+        height: 55,
+        width: 55,
+        child: Stack(
+          children: [
+            CircleAvatar(
+              radius: 25,
+              backgroundColor: Colors.grey,
+              foregroundColor: Colors.white,
+              child: Icon(Icons.person),
+            ),
+            if(contact.selected)
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: CircleAvatar(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.lightGreen,
+                radius: 15,
+                child: Icon(Icons.check),
+              ),
+            ),
+          ],
+        ),
       ),
       title: Text(contact.name),
-      subtitle: Text(contact.status!),
+      subtitle: Text(contact.about!),
     );
   }
 }
