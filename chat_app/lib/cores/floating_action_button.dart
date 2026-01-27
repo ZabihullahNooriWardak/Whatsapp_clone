@@ -1,3 +1,4 @@
+import 'package:chat_app/modules/create_conversation/screens/new_conversation_view.dart';
 import 'package:flutter/material.dart';
 
 class CustomFloatingActionButton extends StatelessWidget {
@@ -7,14 +8,25 @@ class CustomFloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return buildFloatingActionButton(index);
+    return buildFloatingActionButton(context, index);
   }
 }
 
-Widget buildFloatingActionButton(int index) {
+Widget buildFloatingActionButton(BuildContext context, int index) {
   switch (index) {
     case 1:
-      return FloatingActionButton(onPressed: () {}, child: Icon(Icons.chat));
+      return FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return NewConversationView();
+              },
+            ),
+          );
+        },
+        child: Icon(Icons.chat),
+      );
 
     case 2:
       return FloatingActionButton(

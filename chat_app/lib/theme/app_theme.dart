@@ -21,7 +21,7 @@ ThemeData appTheme() {
         borderSide: BorderSide(color: Colors.white, width: 2.0),
       ),
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor:_colorScheme.primary )
+    floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor:_colorScheme.primary ,foregroundColor: Colors.white)
   );
   
 }

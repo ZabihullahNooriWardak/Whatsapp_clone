@@ -46,7 +46,7 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
           ),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.video_call_outlined)),
+          IconButton(onPressed: () {}, icon: Icon(Icons.videocam)),
           IconButton(onPressed: () {}, icon: Icon(Icons.call)),
           PopupMenuButton(
             itemBuilder: (context) {
@@ -147,36 +147,32 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                       Colors.blueGrey,
                       'Documents',
                     ),
-                            _buildBottomSheetIcon(
+                    _buildBottomSheetIcon(
                       Icons.camera_alt,
                       const Color.fromARGB(255, 161, 10, 83),
                       'Camera',
                     ),
-                            _buildBottomSheetIcon(
+                    _buildBottomSheetIcon(
                       Icons.image,
                       Colors.deepPurple,
                       'Gallery',
                     ),
                   ],
                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _buildBottomSheetIcon(
                       Icons.headphones,
                       Colors.orange,
                       'Audio',
                     ),
-                            _buildBottomSheetIcon(
+                    _buildBottomSheetIcon(
                       Icons.location_on_rounded,
                       Colors.purpleAccent,
                       'Location',
                     ),
-                            _buildBottomSheetIcon(
-                      Icons.person,
-                      Colors.blue,
-                      'Contact',
-                    ),
+                    _buildBottomSheetIcon(Icons.person, Colors.blue, 'Contact'),
                   ],
                 ),
               ],

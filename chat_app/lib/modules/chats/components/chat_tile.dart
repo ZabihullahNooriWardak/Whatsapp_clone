@@ -37,10 +37,10 @@ class ChatTile extends StatelessWidget {
               children: [
                 Icon(Icons.done_all),
                 SizedBox(width: 10),
-                Text(chatTile.currentMessage),
+                Text(chatTile.currentMessage!),
               ],
             ),
-            trailing: Text(chatTile.time),
+            trailing: Text(chatTile.time!),
           ),
           Padding(
             padding: EdgeInsets.only(left: 80, right: 20),
