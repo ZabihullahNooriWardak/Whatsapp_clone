@@ -60,9 +60,10 @@ class _CreateGroupViewState extends State<CreateGroupView> {
           ),
           if (selectedContacts.isNotEmpty)
             Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  height: 90,
+                  height: 80,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: selectedContacts.length,
@@ -79,6 +80,7 @@ class _CreateGroupViewState extends State<CreateGroupView> {
                     },
                   ),
                 ),
+                Divider(thickness:1)
               ],
             ),
         ],
