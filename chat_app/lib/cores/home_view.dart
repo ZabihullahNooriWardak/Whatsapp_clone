@@ -1,4 +1,4 @@
-import 'package:chat_app/modules/camera/camera_screen.dart';
+import 'package:chat_app/modules/camera/screens/camera_screen.dart';
 import 'package:chat_app/modules/chats/screens/chats_view.dart';
 import 'package:chat_app/cores/floating_action_button.dart';
 import 'package:flutter/material.dart';
