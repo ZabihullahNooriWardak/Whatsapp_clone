@@ -1,3 +1,4 @@
+import 'package:chat_app/modules/camera/camera_screen.dart';
 import 'package:chat_app/modules/chats/screens/chats_view.dart';
 import 'package:chat_app/cores/floating_action_button.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen>
   int currentIndex = 0;
 
   List<Widget> pages = [
-    Center(child: Text('Camera')),
+    CameraScreen(),
     ChatView(),
     Center(child: Text('Status')),
     Center(child: Text('Calls')),
@@ -27,7 +28,9 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   initState() {
     super.initState();
+
     _tabController = TabController(length: 4, vsync: this, initialIndex: 0);
+
     pageController = PageController();
   }
 
