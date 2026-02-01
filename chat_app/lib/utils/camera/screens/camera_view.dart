@@ -1,5 +1,4 @@
 import 'package:camera/camera.dart';
-import 'package:chat_app/main.dart';
 import 'package:flutter/material.dart';
 
 class CameraView extends StatefulWidget {

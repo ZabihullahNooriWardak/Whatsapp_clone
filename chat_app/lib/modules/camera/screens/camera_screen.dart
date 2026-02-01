@@ -1,10 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:chat_app/main.dart' show cameras;
 import 'package:chat_app/modules/camera/screens/camera_photo_preview_screen.dart';
+import 'package:chat_app/modules/camera/screens/video_preview_screen.dart';
 import 'package:chat_app/utils/camera/screens/camera_view.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -15,21 +14,20 @@ class CameraScreen extends StatefulWidget {
 
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController controller;
+  bool isRecording = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _cameraInitializer();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     controller.dispose();
   }
-  
+
   Future<void> _cameraInitializer() async {
     try {
       controller = CameraController(cameras[0], ResolutionPreset.max);
@@ -37,7 +35,7 @@ class _CameraScreenState extends State<CameraScreen> {
       if (!mounted) return;
       setState(() {});
     } catch (e) {
-      print('Camera access denied !');
+      // print('Camera access denied !');
     }
   }
 
@@ -58,12 +56,42 @@ class _CameraScreenState extends State<CameraScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton(onPressed: () {}, icon: Icon(Icons.flash_off)),
-                    IconButton(
-                      onPressed: () {
+                    GestureDetector(
+                      onTap: () {
                         _onTakePhoto(context);
                       },
-                      icon: Icon(Icons.panorama_fish_eye, size: 70),
+                      onLongPressStart: (d) async {
+                        await controller.startVideoRecording();
+                        setState(() {
+                          isRecording = true;
+                        });
+                      },
+                      onLongPressEnd: (d) async {
+                        final file = await controller.stopVideoRecording();
+                        setState(() {
+                          isRecording = false;
+                        });
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return VideoPreviewScreen(path: file.path,);
+                            },
+                          ),
+                        );
+                      },
+                      child: isRecording
+                          ? ClipRRect(
+                              child: Icon(
+                                Icons.fiber_manual_record,
+                                size: 60,
+                                color: Colors.red,
+                              ),
+                              borderRadius: BorderRadiusGeometry.circular(50),
+                            )
+                          : Icon(Icons.panorama_fish_eye, size: 70),
                     ),
+
                     IconButton(
                       onPressed: () {},
                       icon: Icon(Icons.flip_camera_ios),
@@ -88,7 +116,7 @@ class _CameraScreenState extends State<CameraScreen> {
     // final path = await getTemporaryDirectory();
     // var savingPath = join(path.path, '${DateTime.now()}.png');
     final file = await controller.takePicture();
-
+    if (!context.mounted) return;
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
