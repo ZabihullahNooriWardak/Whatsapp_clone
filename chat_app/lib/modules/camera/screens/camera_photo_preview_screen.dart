@@ -32,13 +32,12 @@ class CameraPhotoPreveiw extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(color: Colors.black),
                 width: MediaQuery.of(context).size.width,
-        
+
                 child: TextField(
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
-                    
                     hintText: 'type a caption... ',
-                
+
                     hintStyle: TextStyle(color: Colors.white),
                     border: InputBorder.none,
                     // border: OutlineInputBorder(borderRadius: BorderRadius.circular(10),),
@@ -46,12 +45,15 @@ class CameraPhotoPreveiw extends StatelessWidget {
                       Icons.add_photo_alternate,
                       color: Colors.white,
                     ),
-                    suffixIcon: Padding(padding: EdgeInsets.symmetric(horizontal: 8),child: CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      child: Icon(Icons.done),
-                    ),)
+                    suffixIcon: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        child: Icon(Icons.done),
+                      ),
+                    ),
                   ),
                 ),
               ),
