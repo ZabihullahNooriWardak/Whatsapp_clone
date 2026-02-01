@@ -18,15 +18,46 @@ class CameraPhotoPreveiw extends StatelessWidget {
           IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
         ],
       ),
-      body: Stack(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height - 150,
-            decoration: BoxDecoration(),
-            child: Image.file(File(path), fit: BoxFit.cover),
-          ),
-        ],
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(),
+              child: Image.file(File(path), fit: BoxFit.cover),
+            ),
+            Positioned(
+              bottom: 0,
+              child: Container(
+                decoration: BoxDecoration(color: Colors.black),
+                width: MediaQuery.of(context).size.width,
+        
+                child: TextField(
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    
+                    hintText: 'type a caption... ',
+                
+                    hintStyle: TextStyle(color: Colors.white),
+                    border: InputBorder.none,
+                    // border: OutlineInputBorder(borderRadius: BorderRadius.circular(10),),
+                    prefixIcon: Icon(
+                      Icons.add_photo_alternate,
+                      color: Colors.white,
+                    ),
+                    suffixIcon: Padding(padding: EdgeInsets.symmetric(horizontal: 8),child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      child: Icon(Icons.done),
+                    ),)
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
