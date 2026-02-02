@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:camera/camera.dart';
 import 'package:chat_app/main.dart' show cameras;
 import 'package:chat_app/modules/camera/screens/camera_photo_preview_screen.dart';
@@ -15,7 +17,8 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController controller;
   bool isRecording = false;
-
+  bool isFlashOn = false;
+  double transformAngle = 0.0;
   @override
   void initState() {
     super.initState();
@@ -55,7 +58,19 @@ class _CameraScreenState extends State<CameraScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    IconButton(onPressed: () {}, icon: Icon(Icons.flash_off)),
+                    IconButton(
+                      onPressed: () {
+                        if (isFlashOn) {
+                          controller.setFlashMode(FlashMode.torch);
+                        } else {
+                          controller.setFlashMode(FlashMode.off);
+                        }
+                        setState(() {
+                          isFlashOn = !isFlashOn;
+                        });
+                      },
+                      icon: Icon(isFlashOn ? Icons.flash_off : Icons.flash_on),
+                    ),
                     GestureDetector(
                       onTap: () {
                         _onTakePhoto(context);
@@ -75,7 +90,7 @@ class _CameraScreenState extends State<CameraScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return VideoPreviewScreen(path: file.path,);
+                              return VideoPreviewScreen(path: file.path);
                             },
                           ),
                         );
@@ -93,8 +108,16 @@ class _CameraScreenState extends State<CameraScreen> {
                     ),
 
                     IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.flip_camera_ios),
+                      onPressed: () {
+                        
+                        setState(() {
+                          transformAngle += pi;
+                        });
+                      },
+                      icon: Transform(
+                        transform: Matrix4.rotationY(transformAngle),
+                        child: Icon(Icons.flip_camera_ios),
+                      ),
                     ),
                   ],
                 ),
