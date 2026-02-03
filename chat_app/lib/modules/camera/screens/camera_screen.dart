@@ -59,17 +59,17 @@ class _CameraScreenState extends State<CameraScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton(
-                      onPressed: () {
+                      onPressed: () async{
                         if (isFlashOn) {
-                          controller.setFlashMode(FlashMode.torch);
+                          await controller.setFlashMode(FlashMode.off);
                         } else {
-                          controller.setFlashMode(FlashMode.off);
+                          await controller.setFlashMode(FlashMode.torch);
                         }
                         setState(() {
                           isFlashOn = !isFlashOn;
                         });
                       },
-                      icon: Icon(isFlashOn ? Icons.flash_off : Icons.flash_on),
+                      icon: Icon(isFlashOn ? Icons.flash_on : Icons.flash_off),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -97,25 +97,29 @@ class _CameraScreenState extends State<CameraScreen> {
                       },
                       child: isRecording
                           ? ClipRRect(
+                              borderRadius: BorderRadiusGeometry.circular(50),
                               child: Icon(
                                 Icons.fiber_manual_record,
                                 size: 60,
                                 color: Colors.red,
                               ),
-                              borderRadius: BorderRadiusGeometry.circular(50),
                             )
                           : Icon(Icons.panorama_fish_eye, size: 70),
                     ),
 
                     IconButton(
-                      onPressed: () {
-                        
+                      onPressed: () async {
+                        await switchCamera();
                         setState(() {
-                          transformAngle += pi;
+                          if (transformAngle == 0.0) {
+                            transformAngle = 180;
+                          } else {
+                            transformAngle = 0.0;
+                          }
                         });
                       },
-                      icon: Transform(
-                        transform: Matrix4.rotationY(transformAngle),
+                      icon: Transform.rotate(
+                     angle: transformAngle,
                         child: Icon(Icons.flip_camera_ios),
                       ),
                     ),
@@ -136,8 +140,6 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   _onTakePhoto(BuildContext context) async {
-    // final path = await getTemporaryDirectory();
-    // var savingPath = join(path.path, '${DateTime.now()}.png');
     final file = await controller.takePicture();
     if (!context.mounted) return;
     Navigator.of(context).push(
@@ -147,5 +149,22 @@ class _CameraScreenState extends State<CameraScreen> {
         },
       ),
     );
+  }
+
+  Future<void> switchCamera() async {
+    if (cameras.length < 2) return;
+    CameraLensDirection newDirection =
+        controller.description.lensDirection == CameraLensDirection.back
+        ? CameraLensDirection.front
+        : CameraLensDirection.back;
+    final newCamera = cameras.firstWhere((element) {
+      return element.lensDirection == newDirection;
+    });
+
+    await controller.dispose();
+    controller = CameraController(newCamera, ResolutionPreset.max);
+    await controller.initialize();
+    if (!mounted) return;
+    setState(() {});
   }
 }
