@@ -59,7 +59,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton(
-                      onPressed: () async{
+                      onPressed: () async {
                         if (isFlashOn) {
                           await controller.setFlashMode(FlashMode.off);
                         } else {
@@ -76,6 +76,7 @@ class _CameraScreenState extends State<CameraScreen> {
                         _onTakePhoto(context);
                       },
                       onLongPressStart: (d) async {
+                        await controller.prepareForVideoRecording();
                         await controller.startVideoRecording();
                         setState(() {
                           isRecording = true;
@@ -119,7 +120,7 @@ class _CameraScreenState extends State<CameraScreen> {
                         });
                       },
                       icon: Transform.rotate(
-                     angle: transformAngle,
+                        angle: transformAngle,
                         child: Icon(Icons.flip_camera_ios),
                       ),
                     ),

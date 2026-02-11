@@ -1,5 +1,7 @@
+import 'package:chat_app/modules/chats/components/message_component.dart';
 import 'package:chat_app/modules/chats/models/chat_model.dart';
 import 'package:flutter/material.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatDetailsView extends StatefulWidget {
   const ChatDetailsView({super.key, required this.chatModel});
@@ -10,10 +12,60 @@ class ChatDetailsView extends StatefulWidget {
 }
 
 class _ChatDetailsViewState extends State<ChatDetailsView> {
+  late IO.Socket socket;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    connectSocket();
+  }
+
+  void connectSocket() {
+    socket = IO.io(
+      "http://192.168.0.8:3000",
+      IO.OptionBuilder()
+          .setTransports(['websocket'])
+          .disableAutoConnect()
+          .build(),
+    );
+    socket.connect();
+
+    socket.onConnect((_) {
+      print('connected from flutter print');
+    });
+
+    socket.on("message_from_node", (data) {
+      print(data);
+    });
+    socket.onDisconnect((_) {
+      print('disconnected from flutter print');
+    });
+  }
+
+  void sendMessage() {
+    try {
+          socket.emit('message_from_flutter', {
+      "msg": "Hello from flutter ",
+      "time": DateTime.now().toString(),
+    });
+    } catch (e,s) {
+      print(e);
+      print('trance:');
+      print(s);
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    socket.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
+      // backgroundColor: Colors.blueGrey,
       appBar: AppBar(
         leadingWidth: double.infinity,
         leading: InkWell(
@@ -60,7 +112,23 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
       ),
       body: Stack(
         children: [
-          ListView(),
+          Image.asset(
+            'assets/images/wb.jpg',
+            height: MediaQuery.of(context).size.height,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
+          ListView(
+            children: [
+              MessageComponent(isOurs: true, content: "Hi"),
+              MessageComponent(content: 'How are you', isOurs: false),
+              MessageComponent(
+                content:
+                    'how you prepared for tommorrow exam it will be very soon tommorrow morning and i think you studied alot for this ',
+                isOurs: true,
+              ),
+            ],
+          ),
           SafeArea(
             child: Align(
               alignment: Alignment.bottomCenter,
@@ -90,7 +158,10 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                                 ),
                                 prefixIcon: InkWell(
                                   onTap: () {},
-                                  child: Icon(Icons.emoji_emotions),
+                                  child: Icon(
+                                    Icons.emoji_emotions,
+                                    color: Colors.grey,
+                                  ),
                                 ),
 
                                 suffixIcon: Row(
@@ -100,11 +171,17 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                                       onPressed: () {
                                         _showBottomSheet();
                                       },
-                                      icon: Icon(Icons.attach_file),
+                                      icon: Icon(
+                                        Icons.attach_file,
+                                        color: Colors.grey,
+                                      ),
                                     ),
                                     IconButton(
                                       onPressed: () {},
-                                      icon: Icon(Icons.camera_alt),
+                                      icon: Icon(
+                                        Icons.camera_alt,
+                                        color: Colors.grey,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -113,7 +190,17 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                           ),
                         ),
                         SizedBox(width: 8),
-                        CircleAvatar(radius: 25, child: Icon(Icons.mic)),
+                        InkWell(
+                          onTap: () {
+                            print('sending');
+                            sendMessage();
+                          },
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Colors.green,
+                            child: Icon(Icons.mic, color: Colors.white),
+                          ),
+                        ),
                       ],
                     ),
                   ],
