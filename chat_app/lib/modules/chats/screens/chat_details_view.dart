@@ -13,6 +13,11 @@ class ChatDetailsView extends StatefulWidget {
 
 class _ChatDetailsViewState extends State<ChatDetailsView> {
   late IO.Socket socket;
+
+  bool isSendButtonVisible = false;
+
+  final controller = TextEditingController();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -44,11 +49,11 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
 
   void sendMessage() {
     try {
-          socket.emit('message_from_flutter', {
-      "msg": "Hello from flutter ",
-      "time": DateTime.now().toString(),
-    });
-    } catch (e,s) {
+      socket.emit('message_from_flutter', {
+        "msg": "Hello from flutter ",
+        "time": DateTime.now().toString(),
+      });
+    } catch (e, s) {
       print(e);
       print('trance:');
       print(s);
@@ -149,6 +154,18 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                             ),
                             margin: EdgeInsets.zero,
                             child: TextFormField(
+                              controller: controller,
+                              onChanged: (value) {
+                                if (controller.text.isNotEmpty) {
+                                  setState(() {
+                                    isSendButtonVisible = true;
+                                  });
+                                } else {
+                                  setState(() {
+                                    isSendButtonVisible = false;
+                                  });
+                                }
+                              },
                               textAlignVertical: TextAlignVertical.center,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
@@ -198,7 +215,7 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
                           child: CircleAvatar(
                             radius: 25,
                             backgroundColor: Colors.green,
-                            child: Icon(Icons.mic, color: Colors.white),
+                            child: Icon(isSendButtonVisible ? Icons.send:Icons.mic, color: Colors.white),
                           ),
                         ),
                       ],

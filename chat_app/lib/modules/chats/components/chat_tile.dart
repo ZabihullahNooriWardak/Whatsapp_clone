@@ -1,22 +1,18 @@
 import 'package:chat_app/modules/chats/models/chat_model.dart';
-import 'package:chat_app/modules/chats/screens/chat_details_view.dart';
 import 'package:flutter/material.dart';
 
 class ChatTile extends StatelessWidget {
-  const ChatTile({super.key, required this.chatTile});
+  const ChatTile({super.key, required this.chatTile, required this.onTap});
+
   final ChatModel chatTile;
+
+
+  final VoidCallback onTap;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) {
-              return ChatDetailsView(chatModel: chatTile);
-            },
-          ),
-        );
-      },
+      onTap: () => onTap(),
       child: Column(
         children: [
           ListTile(

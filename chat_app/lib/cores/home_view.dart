@@ -1,10 +1,12 @@
 import 'package:chat_app/modules/camera/screens/camera_screen.dart';
+import 'package:chat_app/modules/chats/models/chat_model.dart';
 import 'package:chat_app/modules/chats/screens/chats_view.dart';
 import 'package:chat_app/cores/floating_action_button.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.chats});
+  final List<ChatModel> chats;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -18,13 +20,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   int currentIndex = 0;
 
-  List<Widget> pages = [
-    CameraScreen(),
-    ChatView(),
-    Center(child: Text('Status')),
-    Center(child: Text('Calls')),
-  ];
-
   @override
   initState() {
     super.initState();
@@ -33,6 +28,8 @@ class _HomeScreenState extends State<HomeScreen>
 
     pageController = PageController();
   }
+
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen>
             });
           },
           controller: _tabController,
-          // indicatorColor: Colors.white,
           tabs: [
             Tab(icon: Icon(Icons.camera_alt)),
             Tab(text: "CHATS"),
@@ -77,7 +73,12 @@ class _HomeScreenState extends State<HomeScreen>
             currentIndex = value;
           });
         },
-        children: pages,
+        children:   [
+    CameraScreen(),
+    ChatView(chats: widget.chats),
+    Center(child: Text('Status')),
+    Center(child: Text('Calls')),
+  ],
       ),
       floatingActionButton: CustomFloatingActionButton(index: currentIndex),
     );

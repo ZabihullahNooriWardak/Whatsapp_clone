@@ -6,6 +6,7 @@ class ChatModel {
   String? currentMessage;
   String? about;
   bool selected;
+  int id;
   ChatModel({
     required this.name,
     this.isGroup = false,
@@ -13,6 +14,7 @@ class ChatModel {
     this.currentMessage,
     this.icon,
     this.about,
-    this.selected = false
+    this.selected = false,
+    required this.id
   });
 }
